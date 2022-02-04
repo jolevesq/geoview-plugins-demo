@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const package = require('./package.json');
 
 // get version numbers
@@ -48,6 +49,12 @@ const config = {
     new HtmlWebpackPlugin({
       template: './public/index.html',
       filename: 'index.html',
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: './public/locales', to: 'locales' },
+        { from: './public/favicon.ico' },
+      ],
     }),
   ],
 };

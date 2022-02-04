@@ -11,9 +11,6 @@ const useStyles = makeStyles((theme) => ({
   container: {
     height: '100%',
   },
-  map: {
-    height: '500px',
-  },
 }));
 
 // get reference to window object
@@ -53,7 +50,10 @@ const App = (): JSX.Element => {
       <div>Test loading map from an external package</div>
       <div
         id="mapWM"
-        className={['llwp-map', classes.map].join(' ')}
+        className="llwp-map"
+        style={{
+          height: '500px',
+        }}
         data-leaflet="{ 'name': 'Web Mercator', 'projection': 3857, 'zoom': 4, 'center': [60,-100], 'language': 'en-CA', 'basemapOptions': { 'id': 'transport', 'shaded': false, 'labeled': true }, 'layers': [] } "
       ></div>
     </div>

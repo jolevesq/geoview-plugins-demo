@@ -2,6 +2,8 @@
 
 This project is an example demo that shows how you can use the viewer from an external package
 
+[Demo](https://canadian-geospatial-platform.github.io/GeoView-Plugins-Demo/)
+
 ## Running the project
 
 ### First clone this repo
