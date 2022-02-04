@@ -4,6 +4,12 @@ This project is an example demo that shows how you can use the viewer from an ex
 
 [Demo](https://canadian-geospatial-platform.github.io/GeoView-Plugins-Demo/)
 
+```html
+The viewer is being loaded in public/index.html as a script tag
+
+<script src="https://yass0016.github.io/GeoView/gcpv-main.js"></script>
+```
+
 ## Running the project
 
 ### First clone this repo
