@@ -6434,7 +6434,7 @@ const useStyles = styles_makeStyles(theme => ({
   container: {
     height: '100%'
   },
-  map: {
+  mapContainer: {
     height: '500px'
   }
 })); // get reference to window object
@@ -6472,7 +6472,7 @@ const App = () => {
     className: classes.container
   }, /*#__PURE__*/node_modules_react.createElement("div", null, "Test loading map from an external package"), /*#__PURE__*/node_modules_react.createElement("div", {
     id: "mapWM",
-    className: "llwp-map",
+    className: `llwp-map ${classes.mapContainer}`,
     "data-leaflet": "{ 'name': 'Web Mercator', 'projection': 3857, 'zoom': 4, 'center': [60,-100], 'language': 'en-CA', 'basemapOptions': { 'id': 'transport', 'shaded': false, 'labeled': true }, 'layers': [] } "
   }));
 };
