@@ -52,7 +52,7 @@ const config = {
     }),
     new CopyWebpackPlugin({
       patterns: [
-        { from: './public/locales', to: 'locales' },
+        { from: './public/locales', to: 'locales', noErrorOnMissing: true },
         { from: './public/favicon.ico' },
       ],
     }),

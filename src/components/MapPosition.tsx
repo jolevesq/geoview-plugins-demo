@@ -15,6 +15,9 @@
  */
 import React from 'react';
 
+import translationEn from '../../public/locales/en-CA/translation.json';
+import translationFr from '../../public/locales/fr-CA/translation.json';
+
 /**
  * Create a container that renders the map position after the mouse
  * drag on the map has ended
@@ -29,12 +32,12 @@ export const MapPosition = (): JSX.Element => {
   const cgpv = w['cgpv'];
 
   // import exported modules from the viewer
-  const { api, react, ui } = cgpv;
+  const { api, react, ui, useTranslation, leaflet } = cgpv;
 
   /** use react hooks, these hooks uses the viewer's context, importing them from the
    *  importing them from the react module at the top will not work
    */
-  const { useState, useEffect } = react;
+  const { useState, useEffect, useRef } = react;
 
   // import another hook used by material ui, again if you import it directly it won't work
   const { makeStyles } = ui;
@@ -43,22 +46,53 @@ export const MapPosition = (): JSX.Element => {
   const [lat, setLat] = useState(0);
   const [lng, setLng] = useState(0);
 
+  const { t } = useTranslation();
+
+  const { DomEvent } = leaflet;
+
+  const positionContainerRef = useRef();
+
   /**
    * style the position container
    */
   const useStyles = makeStyles((theme: any) => ({
     positionContainer: {
       marginLeft: 75,
-      marginBottom: 10,
+      marginBottom: 30,
       backgroundColor: theme.palette.primary.main,
       padding: 10,
-      height: 100,
+      height: 125,
+      overflow: 'auto',
+      pointerEvents: 'initial',
     },
   }));
 
   const classes = useStyles();
 
+  const mapInstance = api.map('mapWM');
+
+  // add custom languages
+  mapInstance.i18nInstance.addResourceBundle(
+    'en-CA',
+    'translation',
+    translationEn,
+    true,
+    false,
+  );
+  mapInstance.i18nInstance.addResourceBundle(
+    'fr-CA',
+    'translation',
+    translationFr,
+    true,
+    false,
+  );
+
   useEffect(() => {
+    // disable events on container
+    const positionContainerHTMLElement = positionContainerRef.current;
+    DomEvent.disableClickPropagation(positionContainerHTMLElement);
+    DomEvent.disableScrollPropagation(positionContainerHTMLElement);
+
     // listen to map drag move end event
     api.on(api.eventNames.EVENT_MAP_MOVE_END, function (res: any) {
       // if the event came from the loaded map
@@ -76,9 +110,12 @@ export const MapPosition = (): JSX.Element => {
   }, []);
 
   return (
-    <div className={`leaflet-bottom leaflet-left ${classes.positionContainer}`}>
+    <div
+      className={`leaflet-bottom leaflet-left ${classes.positionContainer}`}
+      ref={positionContainerRef}
+    >
       <p>
-        <strong>Map Position from External Package:</strong>
+        <strong>{t('custom.mapPosition')} from External Package:</strong>
       </p>
       <p>Latitude: {lat}</p>
       <p>Longitude: {lng}</p>

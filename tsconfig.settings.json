@@ -22,9 +22,10 @@
     "lib": ["DOM", "ESnext"],
     "strict": true,
     "sourceMap": true,
-    "composite": true,
     "declarationMap": true,
     "declaration": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
   "exclude": ["node_modules"]

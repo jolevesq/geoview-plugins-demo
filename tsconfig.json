@@ -1,10 +1,10 @@
 {
   "extends": "./tsconfig.settings.json",
   "compilerOptions": {
-    "rootDir": "src",
+    "rootDir": "./",
     "outDir": "tsclib",
     "baseUrl": "src"
   },
-  "include": ["./src/"],
+  "include": ["src/**/*", "public/**/*"],
   "references": []
 }
