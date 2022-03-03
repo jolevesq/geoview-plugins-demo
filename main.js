@@ -5898,7 +5898,7 @@ const MapPosition = () => {
           setLng(position.lng);
         }
       }
-    });
+    }, 'mapWM');
   }, []);
   return /*#__PURE__*/node_modules_react.createElement("div", {
     className: `leaflet-bottom leaflet-left ${classes.positionContainer}`,
