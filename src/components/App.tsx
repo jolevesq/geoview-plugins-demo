@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
 import { MapPosition } from './MapPosition';
+import { PanelContent } from './PanelContent';
 
 /**
  * main container and map styling
@@ -32,6 +33,28 @@ const App = (): JSX.Element => {
    */
   useEffect(() => {
     cgpv.init(() => {
+      /**
+       * translations object to inject to the viewer translations
+       */
+      const translations = {
+        'en-CA': {
+          panel: 'Test',
+          nothing_found: 'Nothing found',
+          action_back: 'Back',
+          custom: {
+            mapPosition: 'Map Position',
+          },
+        },
+        'fr-CA': {
+          panel: 'Test',
+          nothing_found: 'Aucun résultat',
+          action_back: 'Retour',
+          custom: {
+            mapPosition: 'Localisation sur la carte',
+          },
+        },
+      };
+
       // create a new component on the leaflet map after it has been rendered
 
       /**
@@ -42,6 +65,59 @@ const App = (): JSX.Element => {
        * or HTML created using React.createElement
        */
       cgpv.api.map('mapWM').addComponent('text', <MapPosition />);
+
+      // get map instance
+      const mapInstance = cgpv.api.map('mapWM');
+
+      // remove existing default panel
+      cgpv.api.map('mapWM').appBarButtons.removeAppbarPanel('default-panel');
+
+      // add custom languages
+      mapInstance.i18nInstance.addResourceBundle(
+        'en-CA',
+        'translation',
+        translations['en-CA'],
+        true,
+        false,
+      );
+      mapInstance.i18nInstance.addResourceBundle(
+        'fr-CA',
+        'translation',
+        translations['fr-CA'],
+        true,
+        false,
+      );
+
+      // get language
+      const { language }: { language: 'en-CA' | 'fr-CA' } = mapInstance;
+
+      // button props
+      const button = {
+        // set ID to testPanelButton so that it can be accessed from the core viewer
+        id: 'testPanelButton',
+        tooltip: translations[language].panel,
+        tooltipPlacement: 'right',
+        icon: '<i class="material-icons">details</i>',
+        visible: true,
+        type: 'icon',
+      };
+
+      // panel props
+      const panel = {
+        title: translations[language].panel,
+        icon: '<i class="material-icons">details</i>',
+        width: 300,
+      };
+
+      // create a new button panel on the appbar
+      const buttonPanel = cgpv.api
+        .map('mapWM')
+        .appBarButtons.createAppbarPanel(button, panel, null);
+
+      // set panel content
+      buttonPanel?.panel?.changeContent(
+        <PanelContent buttonPanel={buttonPanel} mapId={'mapWM'} />,
+      );
     });
   }, []);
 

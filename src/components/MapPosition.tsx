@@ -15,9 +15,6 @@
  */
 import React from 'react';
 
-import translationEn from '../../public/locales/en-CA/translation.json';
-import translationFr from '../../public/locales/fr-CA/translation.json';
-
 /**
  * Create a container that renders the map position after the mouse
  * drag on the map has ended
@@ -68,24 +65,6 @@ export const MapPosition = (): JSX.Element => {
   }));
 
   const classes = useStyles();
-
-  const mapInstance = api.map('mapWM');
-
-  // add custom languages
-  mapInstance.i18nInstance.addResourceBundle(
-    'en-CA',
-    'translation',
-    translationEn,
-    true,
-    false,
-  );
-  mapInstance.i18nInstance.addResourceBundle(
-    'fr-CA',
-    'translation',
-    translationFr,
-    true,
-    false,
-  );
 
   useEffect(() => {
     // disable events on container

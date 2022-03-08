@@ -22,26 +22,34 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.s?[ac]ss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
-      },
-      {
-        test: /\.(png|svg|jpg|gif)$/,
+        test: /.(js|jsx)$/,
+        exclude: /node_modules/,
         use: [
           {
-            loader: 'file-loader',
+            loader: 'babel-loader',
+            options: {
+              plugins: ['@babel/transform-runtime'],
+              presets: [
+                '@babel/preset-env',
+                ['@babel/preset-react', { runtime: 'automatic' }],
+                '@babel/preset-typescript',
+              ],
+            },
           },
         ],
       },
       {
-        test: /.(ts|tsx|js|jsx)$/,
+        test: /\.(ts|tsx)$/,
         exclude: /node_modules/,
-        use: {
-          loader: require.resolve('babel-loader'),
-          options: {
-            rootMode: 'upward',
-          },
-        },
+        use: ['ts-loader'],
+      },
+      {
+        test: /\.(css|scss)$/,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.(jpg|jpeg|png|gif|mp3|svg)$/,
+        use: ['file-loader'],
       },
     ],
   },
