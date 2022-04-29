@@ -5065,7 +5065,7 @@ var MapPosition = function () {
             marginBottom: 30,
             backgroundColor: theme.palette.primary.main,
             padding: 10,
-            height: 125,
+            height: 180,
             overflow: 'auto',
             pointerEvents: 'initial',
         },
@@ -5077,11 +5077,11 @@ var MapPosition = function () {
         DomEvent.disableClickPropagation(positionContainerHTMLElement);
         DomEvent.disableScrollPropagation(positionContainerHTMLElement);
         // listen to map drag move end event
-        api.on(api.eventNames.EVENT_MAP_MOVE_END, function (res) {
+        api.on(api.eventNames.MAP.EVENT_MAP_MOVE_END, function (res) {
             // if the event came from the loaded map
             if (res.handlerName === 'mapWM') {
                 // get the returned position
-                var position = res.position;
+                var position = res.latLng;
                 // update the state
                 if (position) {
                     setLat(position.lat);
@@ -5108,6 +5108,15 @@ var PanelContent_assign = (undefined && undefined.__assign) || function () {
 
 var w = window;
 var cgpv = w['cgpv'];
+var NewPanelContent = function (props) {
+    var buttonPanel = props.buttonPanel;
+    var ui = cgpv.ui, react = cgpv.react;
+    var useRef = react.useRef;
+    var addActionButtonRef = useRef();
+    var changeContentButtonRef = useRef();
+    var Button = ui.elements.Button;
+    return (0,jsx_runtime.jsx)("div", { children: "New Content" });
+};
 /**
  * Create a new panel content
  *
@@ -5116,16 +5125,18 @@ var cgpv = w['cgpv'];
  */
 var PanelContent = function (props) {
     var buttonPanel = props.buttonPanel;
-    var ui = cgpv.ui;
+    var ui = cgpv.ui, react = cgpv.react;
+    var useState = react.useState;
+    var _a = useState(false), addActionButtonStatus = _a[0], setAddActionButtonStatus = _a[1];
     var Button = ui.elements.Button;
-    return ((0,jsx_runtime.jsxs)("div", { children: [(0,jsx_runtime.jsx)("div", { children: "Test content" }), (0,jsx_runtime.jsx)("p", { children: (0,jsx_runtime.jsx)(Button, PanelContent_assign({ tooltip: "Add Action Button", tooltipPlacement: "right", type: "text", onClick: function () {
-                        var _a;
-                        (_a = buttonPanel === null || buttonPanel === void 0 ? void 0 : buttonPanel.panel) === null || _a === void 0 ? void 0 : _a.addActionButton('testButton', 'Test', '<i class="material-icons">details</i>', function () {
-                            alert('Test');
+    return ((0,jsx_runtime.jsxs)("div", { children: [(0,jsx_runtime.jsx)("div", { children: "Test content" }), (0,jsx_runtime.jsx)("p", { children: (0,jsx_runtime.jsx)(Button, PanelContent_assign({ variant: "contained", tooltip: "Change Content", tooltipPlacement: "right", type: "text", onClick: function () {
+                        var _a, _b;
+                        (_a = buttonPanel === null || buttonPanel === void 0 ? void 0 : buttonPanel.panel) === null || _a === void 0 ? void 0 : _a.addActionButton('testButton', 'Test', '<i class="material-icons">arrow_back</i>', function () {
+                            var _a, _b;
+                            (_a = buttonPanel === null || buttonPanel === void 0 ? void 0 : buttonPanel.panel) === null || _a === void 0 ? void 0 : _a.removeActionButton('testButton');
+                            (_b = buttonPanel === null || buttonPanel === void 0 ? void 0 : buttonPanel.panel) === null || _b === void 0 ? void 0 : _b.changeContent((0,jsx_runtime.jsx)(PanelContent, PanelContent_assign({}, props)));
                         });
-                    } }, { children: "Add New Button" })) }), (0,jsx_runtime.jsx)("p", { children: (0,jsx_runtime.jsx)(Button, PanelContent_assign({ tooltip: "Change Content", tooltipPlacement: "right", type: "text", onClick: function () {
-                        var _a;
-                        (_a = buttonPanel === null || buttonPanel === void 0 ? void 0 : buttonPanel.panel) === null || _a === void 0 ? void 0 : _a.changeContent('New Content');
+                        (_b = buttonPanel === null || buttonPanel === void 0 ? void 0 : buttonPanel.panel) === null || _b === void 0 ? void 0 : _b.changeContent((0,jsx_runtime.jsx)(NewPanelContent, PanelContent_assign({}, props)));
                     } }, { children: "Change Content" })) })] }));
 };
 
@@ -5203,8 +5214,6 @@ var App = function () {
             App_cgpv.api.map('mapWM').addComponent('text', (0,jsx_runtime.jsx)(MapPosition, {}));
             // get map instance
             var mapInstance = App_cgpv.api.map('mapWM');
-            // remove existing default panel
-            App_cgpv.api.map('mapWM').appBarButtons.removeAppbarPanel('default-panel');
             // add custom languages
             mapInstance.i18nInstance.addResourceBundle('en-CA', 'translation', translations['en-CA'], true, false);
             mapInstance.i18nInstance.addResourceBundle('fr-CA', 'translation', translations['fr-CA'], true, false);
@@ -5234,9 +5243,10 @@ var App = function () {
             (_a = buttonPanel === null || buttonPanel === void 0 ? void 0 : buttonPanel.panel) === null || _a === void 0 ? void 0 : _a.changeContent((0,jsx_runtime.jsx)(PanelContent, { buttonPanel: buttonPanel, mapId: 'mapWM' }));
         });
     }, []);
-    return ((0,jsx_runtime.jsxs)("div", App_assign({ className: classes.container }, { children: [(0,jsx_runtime.jsx)("div", { children: "Test loading map from an external package" }), (0,jsx_runtime.jsx)("div", { id: "mapWM", className: "llwp-map", style: {
-                    height: '500px',
-                }, "data-leaflet": "{ 'name': 'Web Mercator', 'projection': 3857, 'zoom': 4, 'center': [60,-100], 'language': 'en-CA', 'basemapOptions': { 'id': 'transport', 'shaded': false, 'labeled': true }, 'layers': [] } " })] })));
+    return ((0,jsx_runtime.jsxs)("div", App_assign({ className: classes.container }, { children: [(0,jsx_runtime.jsx)("div", { children: "Test loading map from an external package" }), (0,jsx_runtime.jsx)("div", { id: "mapWM", className: "llwp-map ".concat(classes.container), style: {
+                    height: '100vh',
+                    zIndex: 0,
+                }, "data-lang": "en-CA", "data-config": "{\n        'map': {\n          'interaction': 'dynamic',\n          'initialView': {\n            'zoom': 4,\n            'center': [60, -100]\n          },\n          'projection': 3857,\n          'basemapOptions': {\n            'id': 'transport',\n            'shaded': false,\n            'labeled': true\n          },\n          'layers': []\n        },\n        'theme': 'dark',\n        'languages': ['en-CA']\n        }" })] })));
 };
 /* harmony default export */ const components_App = (App);
 
