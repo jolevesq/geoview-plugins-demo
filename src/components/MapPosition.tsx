@@ -58,7 +58,7 @@ export const MapPosition = (): JSX.Element => {
       marginBottom: 30,
       backgroundColor: theme.palette.primary.main,
       padding: 10,
-      height: 125,
+      height: 180,
       overflow: 'auto',
       pointerEvents: 'initial',
     },
@@ -74,12 +74,12 @@ export const MapPosition = (): JSX.Element => {
 
     // listen to map drag move end event
     api.on(
-      api.eventNames.EVENT_MAP_MOVE_END,
+      api.eventNames.MAP.EVENT_MAP_MOVE_END,
       function (res: any) {
         // if the event came from the loaded map
         if (res.handlerName === 'mapWM') {
           // get the returned position
-          const position = res.position as any;
+          const position = res.latLng as any;
 
           // update the state
           if (position) {

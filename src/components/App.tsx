@@ -69,9 +69,6 @@ const App = (): JSX.Element => {
       // get map instance
       const mapInstance = cgpv.api.map('mapWM');
 
-      // remove existing default panel
-      cgpv.api.map('mapWM').appBarButtons.removeAppbarPanel('default-panel');
-
       // add custom languages
       mapInstance.i18nInstance.addResourceBundle(
         'en-CA',
@@ -126,11 +123,30 @@ const App = (): JSX.Element => {
       <div>Test loading map from an external package</div>
       <div
         id="mapWM"
-        className="llwp-map"
+        className={`llwp-map ${classes.container}`}
         style={{
-          height: '500px',
+          height: '100vh',
+          zIndex: 0,
         }}
-        data-leaflet="{ 'name': 'Web Mercator', 'projection': 3857, 'zoom': 4, 'center': [60,-100], 'language': 'en-CA', 'basemapOptions': { 'id': 'transport', 'shaded': false, 'labeled': true }, 'layers': [] } "
+        data-lang="en-CA"
+        data-config="{
+        'map': {
+          'interaction': 'dynamic',
+          'initialView': {
+            'zoom': 4,
+            'center': [60, -100]
+          },
+          'projection': 3857,
+          'basemapOptions': {
+            'id': 'transport',
+            'shaded': false,
+            'labeled': true
+          },
+          'layers': []
+        },
+        'theme': 'dark',
+        'languages': ['en-CA']
+        }"
       ></div>
     </div>
   );

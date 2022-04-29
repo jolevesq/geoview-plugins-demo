@@ -10,6 +10,20 @@ const w = window as any;
 
 const cgpv = w['cgpv'];
 
+export const NewPanelContent = (props: PanelContentProps): JSX.Element => {
+  const { buttonPanel } = props;
+  const { ui, react } = cgpv;
+
+  const { useRef } = react;
+
+  const addActionButtonRef = useRef();
+  const changeContentButtonRef = useRef();
+
+  const { Button } = ui.elements;
+
+  return <div>New Content</div>;
+};
+
 /**
  * Create a new panel content
  *
@@ -18,7 +32,11 @@ const cgpv = w['cgpv'];
  */
 export const PanelContent = (props: PanelContentProps): JSX.Element => {
   const { buttonPanel } = props;
-  const { ui } = cgpv;
+  const { ui, react } = cgpv;
+
+  const { useState } = react;
+
+  const [addActionButtonStatus, setAddActionButtonStatus] = useState(false);
 
   const { Button } = ui.elements;
 
@@ -27,30 +45,23 @@ export const PanelContent = (props: PanelContentProps): JSX.Element => {
       <div>Test content</div>
       <p>
         <Button
-          tooltip="Add Action Button"
+          variant="contained"
+          tooltip="Change Content"
           tooltipPlacement="right"
           type="text"
           onClick={() => {
             buttonPanel?.panel?.addActionButton(
               'testButton',
               'Test',
-              '<i class="material-icons">details</i>',
+              '<i class="material-icons">arrow_back</i>',
               () => {
-                alert('Test');
+                buttonPanel?.panel?.removeActionButton('testButton');
+
+                buttonPanel?.panel?.changeContent(<PanelContent {...props} />);
               },
             );
-          }}
-        >
-          Add New Button
-        </Button>
-      </p>
-      <p>
-        <Button
-          tooltip="Change Content"
-          tooltipPlacement="right"
-          type="text"
-          onClick={() => {
-            buttonPanel?.panel?.changeContent('New Content');
+
+            buttonPanel?.panel?.changeContent(<NewPanelContent {...props} />);
           }}
         >
           Change Content
