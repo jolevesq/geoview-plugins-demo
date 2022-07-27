@@ -5043,27 +5043,23 @@ var MapPosition = function () {
     // get a reference to the geoview api
     var cgpv = w['cgpv'];
     // import exported modules from the viewer
-    var api = cgpv.api, react = cgpv.react, ui = cgpv.ui, useTranslation = cgpv.useTranslation, leaflet = cgpv.leaflet;
+    var api = cgpv.api, react = cgpv.react, ui = cgpv.ui, useTranslation = cgpv.useTranslation;
     /** use react hooks, these hooks uses the viewer's context, importing them from the
      *  importing them from the react module at the top will not work
      */
-    var useState = react.useState, useEffect = react.useEffect, useRef = react.useRef;
+    var useState = react.useState, useEffect = react.useEffect;
     // import another hook used by material ui, again if you import it directly it won't work
     var makeStyles = ui.makeStyles;
     // state used to store latitude and longtitude after map drag end
     var _a = useState(0), lat = _a[0], setLat = _a[1];
     var _b = useState(0), lng = _b[0], setLng = _b[1];
     var t = useTranslation().t;
-    var DomEvent = leaflet.DomEvent;
-    var positionContainerRef = useRef();
     /**
      * style the position container
      */
     var useStyles = makeStyles(function (theme) { return ({
         positionContainer: {
-            marginLeft: 75,
-            marginBottom: 30,
-            backgroundColor: theme.palette.primary.main,
+            backgroundColor: theme.palette.primary.light,
             padding: 10,
             height: 180,
             overflow: 'auto',
@@ -5072,25 +5068,21 @@ var MapPosition = function () {
     }); });
     var classes = useStyles();
     useEffect(function () {
-        // disable events on container
-        var positionContainerHTMLElement = positionContainerRef.current;
-        DomEvent.disableClickPropagation(positionContainerHTMLElement);
-        DomEvent.disableScrollPropagation(positionContainerHTMLElement);
         // listen to map drag move end event
         api.on(api.eventNames.MAP.EVENT_MAP_MOVE_END, function (res) {
             // if the event came from the loaded map
             if (res.handlerName === 'mapWM') {
                 // get the returned position
-                var position = res.latLng;
+                var position = res.lnglat;
                 // update the state
                 if (position) {
-                    setLat(position.lat);
-                    setLng(position.lng);
+                    setLng(position[0]);
+                    setLat(position[1]);
                 }
             }
         }, 'mapWM');
     }, []);
-    return ((0,jsx_runtime.jsxs)("div", __assign({ className: "leaflet-bottom leaflet-left ".concat(classes.positionContainer), ref: positionContainerRef }, { children: [(0,jsx_runtime.jsx)("p", { children: (0,jsx_runtime.jsxs)("strong", { children: [t('custom.mapPosition'), " from External Package:"] }) }), (0,jsx_runtime.jsxs)("p", { children: ["Latitude: ", lat] }), (0,jsx_runtime.jsxs)("p", { children: ["Longitude: ", lng] })] })));
+    return ((0,jsx_runtime.jsxs)("div", __assign({ className: classes.positionContainer }, { children: [(0,jsx_runtime.jsx)("p", { children: (0,jsx_runtime.jsxs)("strong", { children: [t('custom.mapPosition'), " from External Package:"] }) }), (0,jsx_runtime.jsxs)("p", { children: ["Longitude: ", lng] }), (0,jsx_runtime.jsxs)("p", { children: ["Latitude: ", lat] })] })));
 };
 
 ;// CONCATENATED MODULE: ./src/components/PanelContent.tsx
@@ -5109,12 +5101,6 @@ var PanelContent_assign = (undefined && undefined.__assign) || function () {
 var w = window;
 var cgpv = w['cgpv'];
 var NewPanelContent = function (props) {
-    var buttonPanel = props.buttonPanel;
-    var ui = cgpv.ui, react = cgpv.react;
-    var useRef = react.useRef;
-    var addActionButtonRef = useRef();
-    var changeContentButtonRef = useRef();
-    var Button = ui.elements.Button;
     return (0,jsx_runtime.jsx)("div", { children: "New Content" });
 };
 /**
@@ -5125,9 +5111,7 @@ var NewPanelContent = function (props) {
  */
 var PanelContent = function (props) {
     var buttonPanel = props.buttonPanel;
-    var ui = cgpv.ui, react = cgpv.react;
-    var useState = react.useState;
-    var _a = useState(false), addActionButtonStatus = _a[0], setAddActionButtonStatus = _a[1];
+    var ui = cgpv.ui;
     var Button = ui.elements.Button;
     return ((0,jsx_runtime.jsxs)("div", { children: [(0,jsx_runtime.jsx)("div", { children: "Test content" }), (0,jsx_runtime.jsx)("p", { children: (0,jsx_runtime.jsx)(Button, PanelContent_assign({ variant: "contained", tooltip: "Change Content", tooltipPlacement: "right", type: "text", onClick: function () {
                         var _a, _b;
@@ -5169,8 +5153,9 @@ var useStyles = makeStyles(function (theme) { return ({
 var App_w = window;
 // get reference to geoview apis
 var App_cgpv = App_w['cgpv'];
+var ui = App_cgpv.ui;
 /**
- * Create a container containing a leaflet map using the GeoView viewer
+ * Create a container containing a map using the GeoView viewer
  *
  * @returns {JSX.Elemet} the element that creates the container and the map
  */
@@ -5203,7 +5188,7 @@ var App = function () {
                     },
                 },
             };
-            // create a new component on the leaflet map after it has been rendered
+            // create a new component on the map after it has been rendered
             /**
              * First parameter is the id of that new component
              * the id can be used to remove the added component using the .removeComponent(id) function
@@ -5219,20 +5204,21 @@ var App = function () {
             mapInstance.i18nInstance.addResourceBundle('fr-CA', 'translation', translations['fr-CA'], true, false);
             // get language
             var language = mapInstance.language;
+            // get home icon from ui
+            var HomeIcon = ui.elements.HomeIcon;
             // button props
             var button = {
                 // set ID to testPanelButton so that it can be accessed from the core viewer
                 id: 'testPanelButton',
                 tooltip: translations[language].panel,
                 tooltipPlacement: 'right',
-                icon: '<i class="material-icons">details</i>',
+                children: (0,jsx_runtime.jsx)(HomeIcon, {}),
                 visible: true,
-                type: 'icon',
             };
             // panel props
             var panel = {
                 title: translations[language].panel,
-                icon: '<i class="material-icons">details</i>',
+                icon: (0,jsx_runtime.jsx)(HomeIcon, {}),
                 width: 300,
             };
             // create a new button panel on the appbar
@@ -5246,7 +5232,7 @@ var App = function () {
     return ((0,jsx_runtime.jsxs)("div", App_assign({ className: classes.container }, { children: [(0,jsx_runtime.jsx)("div", { children: "Test loading map from an external package" }), (0,jsx_runtime.jsx)("div", { id: "mapWM", className: "llwp-map ".concat(classes.container), style: {
                     height: '100vh',
                     zIndex: 0,
-                }, "data-lang": "en-CA", "data-config": "{\n        'map': {\n          'interaction': 'dynamic',\n          'initialView': {\n            'zoom': 4,\n            'center': [60, -100]\n          },\n          'projection': 3857,\n          'basemapOptions': {\n            'id': 'transport',\n            'shaded': false,\n            'labeled': true\n          },\n          'layers': []\n        },\n        'theme': 'dark',\n        'languages': ['en-CA']\n        }" })] })));
+                }, "data-lang": "en-CA", "data-config": "{\n        'map': {\n          'interaction': 'dynamic',\n          'view': {\n            'zoom': 4,\n            'center': [-100, 60],\n            'projection': 3857\n          },\n          'basemapOptions': {\n            'id': 'transport',\n            'shaded': false,\n            'labeled': true\n          },\n          'layers': []\n        },\n        'theme': 'dark',\n        'languages': ['en-CA']\n        }" })] })));
 };
 /* harmony default export */ const components_App = (App);
 
