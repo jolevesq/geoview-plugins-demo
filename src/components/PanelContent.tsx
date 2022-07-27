@@ -11,16 +11,6 @@ const w = window as any;
 const cgpv = w['cgpv'];
 
 export const NewPanelContent = (props: PanelContentProps): JSX.Element => {
-  const { buttonPanel } = props;
-  const { ui, react } = cgpv;
-
-  const { useRef } = react;
-
-  const addActionButtonRef = useRef();
-  const changeContentButtonRef = useRef();
-
-  const { Button } = ui.elements;
-
   return <div>New Content</div>;
 };
 
@@ -32,11 +22,7 @@ export const NewPanelContent = (props: PanelContentProps): JSX.Element => {
  */
 export const PanelContent = (props: PanelContentProps): JSX.Element => {
   const { buttonPanel } = props;
-  const { ui, react } = cgpv;
-
-  const { useState } = react;
-
-  const [addActionButtonStatus, setAddActionButtonStatus] = useState(false);
+  const { ui } = cgpv;
 
   const { Button } = ui.elements;
 

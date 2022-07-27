@@ -29,12 +29,12 @@ export const MapPosition = (): JSX.Element => {
   const cgpv = w['cgpv'];
 
   // import exported modules from the viewer
-  const { api, react, ui, useTranslation, leaflet } = cgpv;
+  const { api, react, ui, useTranslation } = cgpv;
 
   /** use react hooks, these hooks uses the viewer's context, importing them from the
    *  importing them from the react module at the top will not work
    */
-  const { useState, useEffect, useRef } = react;
+  const { useState, useEffect } = react;
 
   // import another hook used by material ui, again if you import it directly it won't work
   const { makeStyles } = ui;
@@ -45,18 +45,12 @@ export const MapPosition = (): JSX.Element => {
 
   const { t } = useTranslation();
 
-  const { DomEvent } = leaflet;
-
-  const positionContainerRef = useRef();
-
   /**
    * style the position container
    */
   const useStyles = makeStyles((theme: any) => ({
     positionContainer: {
-      marginLeft: 75,
-      marginBottom: 30,
-      backgroundColor: theme.palette.primary.main,
+      backgroundColor: theme.palette.primary.light,
       padding: 10,
       height: 180,
       overflow: 'auto',
@@ -67,11 +61,6 @@ export const MapPosition = (): JSX.Element => {
   const classes = useStyles();
 
   useEffect(() => {
-    // disable events on container
-    const positionContainerHTMLElement = positionContainerRef.current;
-    DomEvent.disableClickPropagation(positionContainerHTMLElement);
-    DomEvent.disableScrollPropagation(positionContainerHTMLElement);
-
     // listen to map drag move end event
     api.on(
       api.eventNames.MAP.EVENT_MAP_MOVE_END,
@@ -79,12 +68,12 @@ export const MapPosition = (): JSX.Element => {
         // if the event came from the loaded map
         if (res.handlerName === 'mapWM') {
           // get the returned position
-          const position = res.latLng as any;
+          const position = res.lnglat as any;
 
           // update the state
           if (position) {
-            setLat(position.lat);
-            setLng(position.lng);
+            setLng(position[0]);
+            setLat(position[1]);
           }
         }
       },
@@ -93,15 +82,12 @@ export const MapPosition = (): JSX.Element => {
   }, []);
 
   return (
-    <div
-      className={`leaflet-bottom leaflet-left ${classes.positionContainer}`}
-      ref={positionContainerRef}
-    >
+    <div className={classes.positionContainer}>
       <p>
         <strong>{t('custom.mapPosition')} from External Package:</strong>
       </p>
-      <p>Latitude: {lat}</p>
       <p>Longitude: {lng}</p>
+      <p>Latitude: {lat}</p>
     </div>
   );
 };

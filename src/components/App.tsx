@@ -2,6 +2,14 @@ import React, { useEffect } from 'react';
 
 import makeStyles from '@mui/styles/makeStyles';
 
+import {
+  TypeWindow,
+  TypeJsonObject,
+  TypeButtonPanel,
+  TypePanelProps,
+  TypeIconButtonProps,
+} from 'geoview-core-types';
+
 import { MapPosition } from './MapPosition';
 import { PanelContent } from './PanelContent';
 
@@ -15,13 +23,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // get reference to window object
-const w = window as any;
+const w = window as TypeWindow;
 
 // get reference to geoview apis
 const cgpv = w['cgpv'];
 
+const { ui } = cgpv;
+
 /**
- * Create a container containing a leaflet map using the GeoView viewer
+ * Create a container containing a map using the GeoView viewer
  *
  * @returns {JSX.Elemet} the element that creates the container and the map
  */
@@ -55,8 +65,7 @@ const App = (): JSX.Element => {
         },
       };
 
-      // create a new component on the leaflet map after it has been rendered
-
+      // create a new component on the map after it has been rendered
       /**
        * First parameter is the id of that new component
        * the id can be used to remove the added component using the .removeComponent(id) function
@@ -88,21 +97,23 @@ const App = (): JSX.Element => {
       // get language
       const { language }: { language: 'en-CA' | 'fr-CA' } = mapInstance;
 
+      // get home icon from ui
+      const { HomeIcon } = ui.elements;
+
       // button props
-      const button = {
+      const button: TypeIconButtonProps = {
         // set ID to testPanelButton so that it can be accessed from the core viewer
         id: 'testPanelButton',
         tooltip: translations[language].panel,
         tooltipPlacement: 'right',
-        icon: '<i class="material-icons">details</i>',
+        children: <HomeIcon />,
         visible: true,
-        type: 'icon',
       };
 
       // panel props
-      const panel = {
+      const panel: TypePanelProps = {
         title: translations[language].panel,
-        icon: '<i class="material-icons">details</i>',
+        icon: <HomeIcon />,
         width: 300,
       };
 
@@ -132,11 +143,11 @@ const App = (): JSX.Element => {
         data-config="{
         'map': {
           'interaction': 'dynamic',
-          'initialView': {
+          'view': {
             'zoom': 4,
-            'center': [60, -100]
+            'center': [-100, 60],
+            'projection': 3857
           },
-          'projection': 3857,
           'basemapOptions': {
             'id': 'transport',
             'shaded': false,
