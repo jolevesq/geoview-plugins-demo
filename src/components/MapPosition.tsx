@@ -83,11 +83,11 @@ export const MapPosition = (): JSX.Element => {
 
   return (
     <div className={classes.positionContainer}>
-      <p>
-        <strong>{t('custom.mapPosition')} from External Package:</strong>
-      </p>
-      <p>Longitude: {lng}</p>
-      <p>Latitude: {lat}</p>
+      <div>
+        {t('custom.mapPosition')} from External Package:
+      </div>
+      <div>Longitude: {lng}</div>
+      <div>Latitude: {lat}</div>
     </div>
   );
 };

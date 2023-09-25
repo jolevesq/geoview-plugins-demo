@@ -47,7 +47,7 @@ const App = (): JSX.Element => {
        * translations object to inject to the viewer translations
        */
       const translations = {
-        'en-CA': {
+        'en': {
           panel: 'Test',
           nothing_found: 'Nothing found',
           action_back: 'Back',
@@ -55,7 +55,7 @@ const App = (): JSX.Element => {
             mapPosition: 'Map Position',
           },
         },
-        'fr-CA': {
+        'fr': {
           panel: 'Test',
           nothing_found: 'Aucun résultat',
           action_back: 'Retour',
@@ -73,29 +73,29 @@ const App = (): JSX.Element => {
        * Second parameter is the component to add, this can be a react component written in JSX
        * or HTML created using React.createElement
        */
-      cgpv.api.map('mapWM').addComponent('text', <MapPosition />);
+      cgpv.api.maps['mapWM'].addComponent('text', <MapPosition />);
 
       // get map instance
-      const mapInstance = cgpv.api.map('mapWM');
+      const mapInstance = cgpv.api.maps['mapWM'];
 
       // add custom languages
       mapInstance.i18nInstance.addResourceBundle(
-        'en-CA',
+        'en',
         'translation',
-        translations['en-CA'],
+        translations['en'],
         true,
         false,
       );
       mapInstance.i18nInstance.addResourceBundle(
-        'fr-CA',
+        'fr',
         'translation',
-        translations['fr-CA'],
+        translations['fr'],
         true,
         false,
       );
 
       // get language
-      const { language }: { language: 'en-CA' | 'fr-CA' } = mapInstance;
+      const language: 'en' | 'fr' = mapInstance.displayLanguage;
 
       // get home icon from ui
       const { HomeIcon } = ui.elements;
@@ -119,7 +119,7 @@ const App = (): JSX.Element => {
 
       // create a new button panel on the appbar
       const buttonPanel = cgpv.api
-        .map('mapWM')
+        .maps['mapWM']
         .appBarButtons.createAppbarPanel(button, panel, null);
 
       // set panel content
@@ -139,24 +139,27 @@ const App = (): JSX.Element => {
           height: '100vh',
           zIndex: 0,
         }}
-        data-lang="en-CA"
+        data-lang="en"
         data-config="{
         'map': {
           'interaction': 'dynamic',
-          'view': {
+          'viewSettings': {
             'zoom': 4,
             'center': [-100, 60],
-            'projection': 3857
+            'projection': 3978
           },
           'basemapOptions': {
             'id': 'transport',
-            'shaded': false,
+            'shaded': true,
             'labeled': true
           },
           'layers': []
         },
+        'components': ['overview-map],
+        'corePackages': [],
         'theme': 'dark',
-        'languages': ['en-CA']
+        'language': 'en',
+        'supportedLanguages': ['en']
         }"
       ></div>
     </div>

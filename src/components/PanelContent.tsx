@@ -29,7 +29,7 @@ export const PanelContent = (props: PanelContentProps): JSX.Element => {
   return (
     <div>
       <div>Test content</div>
-      <p>
+      <div>
         <Button
           variant="contained"
           tooltip="Change Content"
@@ -52,7 +52,7 @@ export const PanelContent = (props: PanelContentProps): JSX.Element => {
         >
           Change Content
         </Button>
-      </p>
+      </div>
     </div>
   );
 };
