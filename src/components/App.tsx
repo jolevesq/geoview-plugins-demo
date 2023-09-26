@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 
-import makeStyles from '@mui/styles/makeStyles';
-
 import {
   TypeWindow,
   TypeJsonObject,
@@ -13,14 +11,6 @@ import {
 import { MapPosition } from './MapPosition';
 import { PanelContent } from './PanelContent';
 
-/**
- * main container and map styling
- */
-const useStyles = makeStyles((theme) => ({
-  container: {
-    height: '100%',
-  },
-}));
 
 // get reference to window object
 const w = window as TypeWindow;
@@ -36,8 +26,6 @@ const { ui } = cgpv;
  * @returns {JSX.Elemet} the element that creates the container and the map
  */
 const App = (): JSX.Element => {
-  const classes = useStyles();
-
   /**
    * initialize the map after it has been loaded
    */
@@ -130,11 +118,11 @@ const App = (): JSX.Element => {
   }, []);
 
   return (
-    <div className={classes.container}>
+    <div>
       <div>Test loading map from an external package</div>
       <div
         id="mapWM"
-        className={`llwp-map ${classes.container}`}
+        className={`llwp-map`}
         style={{
           height: '100vh',
           zIndex: 0,
@@ -157,7 +145,7 @@ const App = (): JSX.Element => {
         },
         'components': ['overview-map],
         'corePackages': [],
-        'theme': 'dark',
+        'theme': 'light',
         'language': 'en',
         'supportedLanguages': ['en']
         }"

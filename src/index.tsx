@@ -1,7 +1,16 @@
 import React from 'react';
 import { render } from 'react-dom';
+// import { Root, createRoot } from 'react-dom/client';
 
 import App from './components/App';
 
-const container = document.getElementById('root');
-render(<App />, container);
+// get reference to window object
+const w = window;
+
+// get reference to geoview apis
+const cgpv = w['cgpv'];
+
+const { ui, react, createRoot } = cgpv;
+
+const root = createRoot(document.getElementById('root')!);
+root.render(<App />);
